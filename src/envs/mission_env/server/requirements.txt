@@ -1,0 +1,5 @@
+git+ssh://git@github.com/KingJulien0709/uav_mission_env.git
+numpy
+opencv-python
+matplotlib
+Pillow
