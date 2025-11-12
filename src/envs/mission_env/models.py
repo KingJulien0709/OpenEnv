@@ -16,6 +16,13 @@ class MissionAction(Action):
             "tool_name": self.tool_name,
             "parameters": self.parameters,
         }
+    
+    def from_dict(cls, data: Dict[str, Any]) -> "MissionAction":
+        """Create a MissionAction from a dictionary."""
+        return cls(
+            tool_name=data.get("tool_name", ""),
+            parameters=data.get("parameters", {}),
+        )
 
 @dataclass
 class ToolParameter:
