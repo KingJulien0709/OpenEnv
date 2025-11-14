@@ -1,7 +1,7 @@
 import pkg_resources
 import yaml
 import uuid
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from core.env_server import Action, Environment, Observation
 from ..models import MissionAction, MissionObservation, MissionState, ToolDefinition
@@ -28,11 +28,11 @@ class MissionEnvironment(Environment):
             available_tools=[],
         )
 
-    def reset(self) -> MissionObservation:
+    def reset(self, seed: Optional[int] = 42) -> MissionObservation:
         """Reset the environment to an initial state and return the initial observation."""
         self._state.episode_id = str(uuid.uuid4())
         self._state.step_count = 0
-        obs = self.env.reset()
+        obs = self.env.reset(seed=seed)
         #print(obs)
         return self._make_observation(obs)
 
@@ -54,13 +54,13 @@ class MissionEnvironment(Environment):
             raise ValueError(f"Expected MissionAction, got {type(action)}")
 
         # Assuming action.action is a numpy array or list that the env can use
-        obs, reward, done, truncated, info = self.env.step(action.to_dict())
+        obs, reward, terminated, truncated, info = self.env.step(action.to_dict())
         self._state.step_count += 1
 
         #print(obs)
         mission_obs = self._make_observation(obs)
         mission_obs.reward = reward
-        mission_obs.done = done
+        mission_obs.done = terminated or truncated
 
         #update state
         self._state.current_state_name = obs.get('current_state_name', "")
