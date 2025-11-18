@@ -60,7 +60,7 @@ class MissionEnvironment(Environment):
         #print(obs)
         mission_obs = self._make_observation(obs)
         mission_obs.reward = reward
-        mission_obs.done = terminated or truncated
+        mission_obs.done = terminated or truncated or self._state.step_count >= 10
 
         #update state
         self._state.current_state_name = obs.get('current_state_name', "")
