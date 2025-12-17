@@ -14,11 +14,14 @@ except ImportError:
     # install with pip install https://github.com/KingJulien0709/uav_mission_env.git
 
 class MissionEnvironment(Environment):
-    def __init__(self, random_seed: int = 42):
+    def __init__(self, random_seed: int = 42, config: Optional[Dict[str, Any]] = None):
         super().__init__()  # Call parent __init__
         if UAVMissionEnv is None:
             raise ImportError("Please install uav_mission_env package: pip install git+https://github.com/KingJulien0709/uav_mission_env.git")
-        self.env = UAVMissionEnv()  # default configuration
+        kwargs = {}
+        if config is not None:
+            kwargs.update(config)
+        self.env = UAVMissionEnv(**kwargs)   # default configuration
         self.dataset_path = pkg_resources.resource_filename('uav_mission_env', 'data')
         self._state = MissionState(
             episode_id=str(uuid.uuid4()),
