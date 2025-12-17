@@ -21,7 +21,7 @@ class MissionEnvironment(Environment):
         kwargs = {}
         if config is not None:
             kwargs.update(config)
-        self.env = UAVMissionEnv(**kwargs)   # default configuration
+        self.env = UAVMissionEnv(kwargs)   # default configuration
         self.dataset_path = pkg_resources.resource_filename('uav_mission_env', 'data')
         self._state = MissionState(
             episode_id=str(uuid.uuid4()),
